@@ -1,18 +1,46 @@
 import streamlit as st
+import base64
+
 
 # Página inicial
 def pagina_inicio():
-    st.title("Polo UAB Formosa - GO")
-    st.markdown("### Vídeo de Apresentação")
-    st.video("https://www.youtube.com/embed/I17fKqbyLF8?si=dLo106rf1HgbkBq4")
+    # st.title("Polo UAB Formosa - GO")
+    # st.markdown("### Vídeo de Apresentação")
+
+    # Carrega e codifica o vídeo em base64
+    video_file = open("img/Polo-uab-formosa.mp4", "rb")
+    video_bytes = video_file.read()
+    video_base64 = base64.b64encode(video_bytes).decode()
+
+    # HTML customizado com largura ajustada (ex: 1000px)
+    video_html = f"""
+        <h1 style:"text-align: center;">Polo UAB Formosa - GO</h1>
+        <h4>Vídeo de Apresentação</h4>
+        <video width="1000" height="450" controls autoplay loop >
+            <source src="data:video/mp4;base64,{video_base64}" type="video/mp4">
+            Seu navegador não suporta o vídeo.
+        </video>
+    """# muted
+
+    # Renderiza o HTML com vídeo customizado
+    st.markdown(video_html, unsafe_allow_html=True)    
+
+def exibir_pdf(caminho_pdf, descricao, altura=600):
+    st.markdown(f"### {descricao}")
+    with open(caminho_pdf, "rb") as f:
+        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+        pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="{altura}" type="application/pdf"></iframe>'
+        st.markdown(pdf_display, unsafe_allow_html=True)
+
 
 # Função auxiliar para bloco de curso
-def bloco_curso(nome, duracao, modalidade, instituicao, descricao):
+def bloco_curso(nome, duracao, modalidade, instituicao, descricao, mais_informacoes):
     with st.expander(nome):
-        col1, col2 = st.columns(2)
+        col1, col2 = st.columns([3,1])
         with col1:
             st.markdown(f"**Duração:** {duracao}")
             st.markdown(f"**Modalidade:** {modalidade}")
+            st.markdown(f"**Mais informações:** {mais_informacoes}")
         with col2:
             st.markdown(f"**Instituição:** {instituicao}")
         st.markdown("----")
@@ -23,14 +51,14 @@ def pagina_graduacao():
     st.title("Cursos de Graduação")
 
     cursos_grad = [
-        ("Licenciatura em Ciências Biológicas", "4 anos", "EAD", "UEG", "Forma professores para atuarem na educação básica, com foco em ecologia, genética, microbiologia e ensino de ciências."),
-        ("Licenciatura em Pedagogia", "4 anos", "EAD", "IFGoiano", "Capacita profissionais para atuação na educação infantil e nos anos iniciais do ensino fundamental."),
-        ("Licenciatura em Pedagogia", "4 anos", "EAD", "UnB", "Curso oferecido com foco em práticas pedagógicas inovadoras e políticas públicas educacionais."),
-        ("Licenciatura em Letras/Inglês", "4 anos", "EAD", "IFB", "Habilita professores de inglês para educação básica, com foco em linguística, literatura e ensino de idiomas."),
-        ("Licenciatura em Matemática", "4 anos", "EAD", "IFB", "Voltado para a formação de professores de matemática com ênfase em didática e raciocínio lógico."),
-        ("Tecnólogo em Gestão do Agronegócio", "3 anos", "EAD", "UFCAT", "Forma profissionais para atuar na cadeia produtiva do agronegócio com foco em gestão e logística."),
-        ("Tecnologia em Gestão Comercial", "3 anos", "EAD", "IFG", "Desenvolve habilidades em administração, vendas, marketing e gestão empresarial."),
-        ("Tecnologia em Sistemas para Internet", "3 anos", "EAD", "IFMT", "Foca no desenvolvimento de aplicações web, segurança da informação e bancos de dados.")
+        ("Licenciatura em Ciências Biológicas", "Mínimo 4 anos e Máximo 6 anos", "EAD", "UEG", "Forma professores para atuarem na educação básica, com foco em ecologia, genética, microbiologia e ensino de ciências.", "https://www.ueg.br/cear/conteudo/23819_curso_de_licenciatura_em_ciencias_biologicas"),
+        ("Licenciatura em Pedagogia", "4 anos (8 semestres)", "EAD", "IFGoiano", "Capacita profissionais para atuação na educação infantil e nos anos iniciais do ensino fundamental.", "https://ifgoiano.edu.br/home/index.php/curso-superior/22857-licenciatura-em-pedagogia.html"),
+        ("Licenciatura em Pedagogia", "Mínimo 4 anos e Máximo 7 anos", "EAD", "UnB", "Curso oferecido com foco em práticas pedagógicas inovadoras e políticas públicas educacionais.", "https://ead.unb.br/cursos/graduacao-ead/2-publicacoes/93-pedagogia"),
+        ("Licenciatura em Letras/Inglês", "4 anos", "EAD", "IFB", "Habilita professores de inglês para educação básica, com foco em linguística, literatura e ensino de idiomas.", "https://www.ifb.edu.br/reitori/36237-letras-ingles-uab-licenciatura-na-modalidade-de-educacao-a-distancia"),
+        ("Licenciatura em Matemática", "4 anos", "EAD", "IFB", " Formar professores com amplo domínio do conhecimento matemático e responsabilidade social, capaz de problematizar, interferir e construir o conhecimento coletivamente.", "https://ifb.edu.br/reitori/36238-matematica-uab-licenciatura-na-modalidade-de-educacao-a-distancia"),
+        ("Tecnólogo em Gestão do Agronegócio", "3 anos", "EAD", "UFCAT", "Forma profissionais para atuar na cadeia produtiva do agronegócio com foco em gestão e logística.", "https://cgen.ufcat.edu.br/sobre-agr"),
+        ("Tecnologia em Gestão Comercial", "2 anos e meio", "EAD", "IFG", "O curso de Tecnologia em Gestão Comercial na modalidade de educação a distância tem como objetivo geral formar profissionais com conhecimento e aptidão para a utilização das ferramentas de gestão estratégica e comercial, da logística empresarial, da tecnologia da informação, do marketing e da gestão de projetos, que complementam e viabilizam as estratégias de gestão específicas que impactam nas relações comerciais", "https://www.ifg.edu.br/ultimas-noticias-campus-uruacu/37222-gestao-comercial-ead"),
+        ("Tecnologia em Sistemas para Internet", "3 anos", "EAD", "IFMT", "O Tecnólogo em Sistemas para Internet estará apto a desenvolver atividades de análise, projeto, desenvolvimento e implementação de Websites, enfocando áreas de marketing, design e execução de projetos em Internet, atuando também em aplicação de recursos e implementação de computadores e servidores Web.", "https://cread.ifmt.edu.br/conteudo/pagina/curso-de-tecnologia-em-sistemas-para-internet/")
     ]
 
     for curso in cursos_grad:
@@ -41,11 +69,11 @@ def pagina_especializacao():
     st.title("Cursos de Especialização")
 
     cursos_esp = [
-        ("Educação Inclusiva com Ênfase na Educação de Surdos", "18 meses", "EAD", "IFMT", "Capacita profissionais da educação para inclusão de surdos no ambiente escolar, com foco em LIBRAS e práticas pedagógicas inclusivas."),
-        ("Educação, Meio Ambiente e Sustentabilidade", "18 meses", "EAD", "IFG", "Promove formação crítica e interdisciplinar sobre sustentabilidade, políticas ambientais e educação ambiental."),
-        ("Geoprocessamento", "18 meses", "EAD", "UFABC", "Qualifica profissionais para o uso de ferramentas e técnicas de geoprocessamento aplicadas ao planejamento e à análise espacial."),
-        ("Análises Químicas Ambientais", "18 meses", "EAD", "UFCAT", "Curso voltado para profissionais interessados em controle ambiental, com foco em técnicas laboratoriais e legislação ambiental."),
-        ("Alfabetização e Letramento", "18 meses", "EAD", "IFG", "Oferece base teórica e metodológica para práticas de alfabetização nos anos iniciais do ensino fundamental.")
+        ("Educação Inclusiva com Ênfase na Educação de Surdos", "18 meses", "EAD", "IFMT", "Capacita profissionais da educação para inclusão de surdos no ambiente escolar, com foco em LIBRAS e práticas pedagógicas inclusivas.", "https://cread.ifmt.edu.br/conteudo/pagina/esp-educ-inclusiva-enfase-educ-surdos/"),
+        ("Educação, Meio Ambiente e Sustentabilidade", "12 meses", "EAD", "IFG", "Tem o objetivo de capacitar docentes e profissionais das mais diversas áreas de formação para desenvolver atividades ligadas à educação, meio ambiente e sustentabilidade, visando a valorização e sustentabilidade de nossos ecossistemas, considerando as demandas sociais atuais.", "https://www.ifg.edu.br/ultimas-noticias/33927-inscricoesmeioambiente"),
+        ("Geoprocessamento", "12 meses", "EAD", "UFABC", "Qualificar recursos humanos, especialmente na formação para o desenvolvimento econômico e social local/regional, para uso das tecnologias de geoprocessamento, bem como capacitar profissionais no conhecimento e uso de técnicas de geoprocessamento e suas aplicações nas diversas áreas do conhecimento.", "https://sig.ufabc.edu.br/sigaa/public/curso/portal.jsf?lc=pt_BR&id=2456623"),
+        ("Análises Químicas Ambientais", "12 meses", "EAD", "UFCAT", "Capacitar os interessados em desenvolver e aplicar inovações tecnológicas nos setores ligados ao meio ambiente, compatíveis com os conhecimentos e as perspectivas do desenvolvimento sustentável, levando sempre em consideração aspectos técnicos, socioeconômicos, ambientais, culturais e éticos.", "https://quimica.ufcat.edu.br/especializacao-em-analises-quimicas-ambientais"),
+        ("Alfabetização e Letramento", "12 meses", "EAD", "IFG", "Destina-se aos portadores de diploma de graduação em Pedagogia ou Letras, que estejam em efetivo exercício como professores de disciplinas relacionadas à alfabetização e letramento nos anos iniciais da Educação Básica pública.", "http://selecao.ifg.edu.br/downloads/cod2481/edital%2034%20-2024%20-%20selecao%20de%20estudantes%20para%20os%20cursos%20de%20especializacao%20ead%202025-1.pdf")
     ]
 
     for curso in cursos_esp:
@@ -53,10 +81,13 @@ def pagina_especializacao():
 
 # Página de contatos
 def pagina_contatos():
-    st.title("Contatos")
-    st.write("📱 Redes Sociais: @uabpolo")
-    st.write("🌐 Facebook: Polo UAB Formosa")
-    st.write("📞 Telefone: (61) 9 9988-8422")
+    st.title("**Contatos**")
+    st.write("📱 **Instagram:** https://www.instagram.com/uabpolo/")
+    st.write("🌐 **Facebook:** Polo UAB Formosa")
+    st.write("📞 **Telefone:** (61) 9 9988-8422")
+    st.write("📍 **Endereço:** Pça 21 de Abril, nº 60. Bairro Abreu. Formosa - GO. CEP: 73803-025.")
+    st.write("👤 **Coordenador:** Dione Antônio de Castro Reis")
+    st.write("✉️ **E-mail:** polouabformosa@hotmail.com ou dionecastro1@hotmail.com")
 
     st.markdown("---")
     st.subheader("📬 Fale Conosco")
@@ -72,3 +103,24 @@ def pagina_contatos():
         if enviado:
             st.success("✅ Sua mensagem foi enviada com sucesso!")
             # poderia armazenar ou enviar os dados via API/email
+
+
+def mostrar_resumo_uab():
+    resumo = """
+# Universidade Aberta do Brasil (UAB)
+
+A **Universidade Aberta do Brasil (UAB)** é um sistema público criado pelo governo federal brasileiro em 2006 com o objetivo de expandir e democratizar o acesso ao ensino superior, especialmente para as regiões mais afastadas ou com pouca oferta de universidades presenciais.
+
+Ela funciona por meio da **educação a distância (EaD)**, em parceria com instituições públicas de ensino superior (como universidades federais e estaduais), e utiliza polos de apoio presencial espalhados pelo país. Esses polos oferecem estrutura física, orientação acadêmica e suporte tecnológico para os alunos.
+
+### Principais objetivos da UAB:
+- Ampliar o acesso ao ensino superior público e gratuito.
+- Formar e capacitar professores para a educação básica.
+- Promover a inclusão social por meio da educação.
+
+### Público-alvo:
+- Pessoas que vivem longe dos grandes centros urbanos.
+- Profissionais da educação que buscam formação ou atualização.
+- Todos que buscam ensino superior de qualidade, mas com flexibilidade de tempo e local.
+    """
+    st.markdown(resumo)
