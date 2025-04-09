@@ -20,7 +20,7 @@ if selecionado == "Início": # "https://www.youtube.com/shorts/X_gbaOQa4Rg"
     st.divider()
     mostrar_resumo_uab()
     st.divider()
-    exibir_pdf("docs/Relação de Cursos Ofertados no Polo UAB desde o início Graduação.pdf", "Visão geral dos cursos de graduação ofertados no Polo de Formosa", altura=600)
+    exibir_pdf("docs/cursos_graduacao.pdf", "Visão geral dos cursos de graduação ofertados no Polo de Formosa", altura=600)
 elif selecionado == "Cursos de Graduação":
     pagina_graduacao()
 elif selecionado == "Cursos de Especialização":
