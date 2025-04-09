@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 import base64
 
 
@@ -124,3 +125,37 @@ Ela funciona por meio da **educação a distância (EaD)**, em parceria com inst
 - Todos que buscam ensino superior de qualidade, mas com flexibilidade de tempo e local.
     """
     st.markdown(resumo)
+    
+
+
+def mostrar_cursos_graduacao():
+    cursos = [
+        ("01", "Licenciatura em Artes Visuais", "50/51/25", "UAB/UFG", "2007-2011", "Concluído"),
+        ("02", "Licenciatura em Ciências Biológicas - Turma I", "50/51/22", "UAB/UEG", "2009-2013", "Concluído"),
+        ("03", "Licenciatura em Educação Física", "35/35/18", "UAB/UFG", "2010-2013", "Concluído"),
+        ("04", "Bacharelado em Administração Pública", "50/50/37", "UAB/UEG", "2010-2013", "Concluído"),
+        ("05", "Licenciatura em Educação Física", "50/29/12", "PARFOR/UFG", "2011-2015", "Concluído"),
+        ("06", "Licenciatura em Artes Visuais", "50/26/10", "PARFOR/UFG", "2011-2015", "Concluído"),
+        ("07", "Bacharelado em Administração Pública", "60/59/18", "UAB/UEG", "2017-2020", "Concluído"),
+        ("08", "Licenciatura em Ciências Biológicas - Turma II", "50/50/18", "UAB/UEG", "2017-2020", "Concluído"),
+        ("09", "Licenciatura em Computação", "90/45/16", "UAB/UEG", "2017-2020", "Concluído"),
+        ("10", "Licenciatura em Ciências Biológicas - Turma III", "40/40/8 (4 ainda cursando 2025)", "UAB/UEG", "2019-2023", "Concluído"),
+        ("11", "Tecnólogo em Gestão do Agronegócio", "20/12/-", "UAB/UFCAT", "2023-2025", "Ativo"),
+        ("12", "Licenciatura em Letras/Inglês", "60/48/-", "UAB/IFB", "2023-2027", "Ativo"),
+        ("13", "Licenciatura em Matemática", "60/26/-", "UAB/IFB", "2023-2027", "Ativo"),
+        ("14", "Licenciatura em Pedagogia EPT", "50/59/-", "UAB/IFGOIANO", "2023-2027", "Ativo"),
+        ("15", "Licenciatura em Pedagogia", "33/31/-", "UAB/UnB", "2023-2026", "Ativo"),
+        ("16", "Licenciatura em Ciências Biológicas - Turma IV", "40/32/-", "UAB/UEG", "2024-2027", "Ativo"),
+        ("17", "Tecnologia em Gestão Comercial", "30/32/-", "UAB/IFG", "2024-2026", "Ativo"),
+        ("18", "Tecnologia em Sistemas para Internet", "25/27/-", "UAB/IFMT", "2025-2027", "Ativo"),
+        ("19", "Bacharelado em Administração Pública", "20/20/-", "UAB/UFG", "2025-2028", "Ativo"),
+        ("20", "Bacharelado em Biblioteconomia", "50/50/-", "UAB/UFG", "2025-2028", "Ativo"),
+    ]
+
+    df = pd.DataFrame(cursos, columns=[
+        "Nº", "Curso", "Vagas / Matrículas / Concluídos",
+        "Instituição", "Período", "Situação"
+    ])
+
+    st.subheader("📚 Visão geral dos cursos de graduação ofertados no Polo de Formosa")
+    st.table(df)
